@@ -2,15 +2,21 @@
 # coding: UTF-8
 
 from __future__ import division
+
+from itertools import count
+
 import numpy as np
 import networkx as nx
+import pylab
 from matplotlib import pyplot as plt
 
 
-class MLW_graph(object):
-    def __init__(self, local_graph=nx.complete_graph(5), p1=0.0, p2=0.28, p3=0.39, p4=0.43, e1=2, e2=2, e3=2, e4=2,
-                 N_lw=2, N=100):
+from opinionModel import *
 
+
+class MLW_graph(object):
+    def __init__(self, local_graph=nx.complete_graph(8), p1=0.0, p2=0.28, p3=0.39, p4=0.43, e1=2, e2=2, e3=2, e4=2,
+                 N_lw=2, N=100,state = 'n'):
         self.p1 = p1
         self.p2 = p2
         self.p3 = p3
@@ -19,6 +25,7 @@ class MLW_graph(object):
         self.e2 = e2
         self.e3 = e3
         self.e4 = e4
+        self.state = state
         self.N_lw = N_lw
         self.local_graph = local_graph
 
@@ -45,8 +52,11 @@ class MLW_graph(object):
                 # print("d")
                 self.delete_edge_within_lw(1)
 
-            else:
-                # print("e")
+            # else:
+            #     # print("e")
+            #     self.add_edge_among_lw(1)
+
+            elif self.p4 <= r < 0.7:
                 self.add_edge_among_lw(1)
 
     def get_G(self):
@@ -57,6 +67,15 @@ class MLW_graph(object):
         """
         g = self.local_graph.copy()
         nx.set_node_attributes(g, "cluster", self.N_lw)
+        nx.set_node_attributes(g, "opinion", self.N_lw)
+        nx.set_node_attributes(g, "activist", 0)
+
+        # 分極してないばあい
+        if self.state == 'n':
+            for nodeNum in range(nx.number_of_nodes(G)):
+                G.node[nodeNum]['opinion'] = randint(2)
+
+
         self.G = self.compose(self.G, g)
 
     def add_new_node_to_lw(self, alpha):
@@ -71,7 +90,10 @@ class MLW_graph(object):
 
         # 新規ノードの追加
         node_id = len(self.G)
-        self.G.add_node(node_id, cluster=obj_cluster)
+        self.G.add_node(node_id, cluster=obj_cluster, opinion= randint(2),activist = 0)
+        # ここ
+
+
         # 新規エッジの追加
         add_edge = np.random.choice(obj_nodes, self.e1, p=obj_prob, replace=False)
         for n in add_edge:
@@ -147,7 +169,16 @@ class MLW_graph(object):
     def set_cluster_label(self, G_lst):
         for i, G in enumerate(G_lst):
             nx.set_node_attributes(G, "cluster", i)
+            nx.set_node_attributes(G, "opinion", i)
+            nx.set_node_attributes(G, "activist",0)
+
+            # 分極していない場合
+            if self.state == 'n':
+                for nodeNum in range(nx.number_of_nodes(G)):
+                    G.node[nodeNum]['opinion'] = randint(2)
+
         return G_lst
+
 
     def relabel(self, G_lst):
         """ノードのラベルを振り直す
@@ -172,12 +203,53 @@ class MLW_graph(object):
         return ret_G
 
 
-G = MLW_graph(N=10).get_G()
+def makeClusterG (allNodeNum,firstNodeNum,state,filename):
+    G = MLW_graph(N=allNodeNum,local_graph=nx.complete_graph(firstNodeNum),state = state).get_G()
+    nx.write_gpickle(G,filename)
 
 
+def makeClusterList(G):
+    clusterList_a = []
+    clusterList_b = []
+    for nodeNum in range(nx.number_of_nodes(G)):
+        if G.node[nodeNum]['opinion'] == 0:
+            clusterList_a.append(nodeNum)
+        else:
+            clusterList_b.append(nodeNum)
+    return clusterList_a, clusterList_b
 
-print G.neighbors(2)
-pos = nx.spring_layout(G) # グラフ形式を選択。ここではスプリングモデルでやってみる
-nx.draw(G, pos, with_labels=True) # グラフ描画。 オプションでノードのラベル付きにしている
-plt.show()
+
+def printClusteredG(G):
+    clusterList = makeClusterList(G)
+    clusterList_a = clusterList[0]
+    clusterList_b = clusterList[1]
+    pos = nx.spring_layout(G)  # グラフ形式を選択。ここではスプリングモデルでやってみる
+    nx.draw_networkx_nodes(G, pos, clusterList_a, node_size=20, node_color='b')
+    nx.draw_networkx_nodes(G, pos, clusterList_b, node_size=20, node_color='r')
+    nx.draw_networkx_edges(G, pos, width=0.1)
+    pylab.xticks([])
+    pylab.yticks([])
+    pylab.show()
+
+def makeClusteredInfor(filename):
+    G = nx.read_gpickle(filename)
+    opinionList =[]
+    for nodeNum in range(nx.number_of_nodes(G)):
+        opinionList.append(G.node[nodeNum]['opinion'])
+    return G,opinionList
+
+# G = makeClusterG(500,230,'b','clusteredNet.gpickle')
+#
+#
+# opinionLayer_info = makeClusteredInfor('clusteredNet.gpickle')
+# opinionLayer = opinionLayer_info[0]
+# opinionList = opinionLayer_info[1]
+#
+#
+# printClusteredG(opinionLayer)
+#
+# for num in range(1):
+#     majorityGame(opinionLayer,opinionList)
+#
+# printClusteredG(opinionLayer)
 

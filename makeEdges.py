@@ -62,7 +62,6 @@ def makeClustered_edges(filename,nodeNum):
 
 makeClustered_edges('clustered_test.csv',30)
 
-
 makeRegular_edges('test.csv',10)
 
 

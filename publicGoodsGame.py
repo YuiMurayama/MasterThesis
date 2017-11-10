@@ -5,33 +5,8 @@ import math
 import networkx as nx
 import random
 from matplotlib import pyplot as plt
-
-#近隣とゲームをして戦略からそのポイントが決まる
 from makeGraph import makeGraph_fromFile
 
-
-def game(G, s, t):
-    strategyList = []
-    for nodeNum in range(nx.number_of_nodes(G)):
-        p1 = G.node[nodeNum]#ランダムにノードを選択
-        p2_list =G.neighbors(nodeNum)
-        if p2_list != []:
-            p2 = G.node[random.choice(p2_list)]
-            if p1['strategy'] == 1 and p2['strategy'] == 1:
-                p1['point'] += 1
-                p2['point'] += 1
-            elif p1['strategy'] == 0 and p2['strategy'] == 1:
-                p1['point'] += t
-                p2['point'] += s
-            elif p1['strategy'] == 1 and p2['strategy'] == 0:
-                p1['point'] += s
-                p2['point'] += t
-            else:
-                p1['point'] += 0
-                p2['point'] += 0
-        strategyList.append(p1['strategy'])
-    # print strategyList
-    return G,strategyList
 
 #リストにいるプレイヤーの中からcooperatorの数を返す
 def countCooperatorofList(G,playerList):
@@ -41,17 +16,12 @@ def countCooperatorofList(G,playerList):
             numOfCooperator += 1
     return numOfCooperator
 
-
 def getPayoff(G,p1,r,c,gamePlayer_List):
     numOfC = countCooperatorofList(G, gamePlayer_List)
-    # print 'Cの数は', numOfC
-    # print 'playerは', len(gamePlayer_List)
-
     if p1['strategy'] == 1:
         p1['point'] += r * numOfC * c / len(gamePlayer_List) - c
     else:
         p1['point'] += r * numOfC * c / len(gamePlayer_List)
-
     return p1['point']
 
 
@@ -76,7 +46,7 @@ def publicGoodGame(G,r,c):
         # print gamePlayer_List
         p1['point'] = getPayoff(G,p1,r,c,gamePlayer_List)
         strategyList.append(p1['strategy'])
-        print '最終',p1['point']
+        # print '最終',p1['point']
     return G,strategyList
 
 
@@ -88,7 +58,7 @@ def copyStrategy(G,strategyList):
         if copyNode_list != []:
             copyNodeNum =random.choice(copyNode_list)   #候補リストの中からランダムに選択
             copyNode = G.node[copyNodeNum]              #コピー相手の決定
-            p = (1.0-math.tanh(node['point']-copyNode['point']))*0.5   #どのくらいの確率で戦略をコピーするのか
+            p = (1.0-math.tanh(node['point']-copyNode['point']))*0.2   #どのくらいの確率で戦略をコピーするのか
             # print 'tanh', math.tanh(node['point'] - copyNode['point']),'pは',p
             x = random.random()
             if x < p:
@@ -101,15 +71,13 @@ gameLayer_info = makeGraph_fromFile(10, 'test.csv', 'GL', 0.0)
 gameLayer = gameLayer_info[0]
 strategyList = gameLayer_info[2]
 
-Gset = publicGoodGame(gameLayer, 1.1, 1)
-G = Gset[0]
-strategyList = Gset[1]
-G = copyStrategy(G,strategyList)
 
-
-for nodeNum in range(nx.number_of_nodes(G)):
-    print G.node[nodeNum]['strategy']
-
+def publicGoods_game(G,r,c):
+    Gset = publicGoodGame(G, r, c)
+    G = Gset[0]
+    strategyList = Gset[1]
+    G = copyStrategy(G,strategyList)
+    return G
 
 
 

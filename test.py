@@ -5,24 +5,20 @@
 from matplotlib import pyplot as plt
 import networkx as nx
 
-G = nx.Graph()
-f_coords = open('test.csv')
-edgeLines = f_coords.readlines()
+import matplotlib.pyplot as plt
+from matplotlib import animation
+import numpy as np
+import networkx as nx
+import random
 
-# エッジを貼る
-f_edge = open('test.csv')
-edgeLines = f_edge.readlines()
-f_edge.close()
-for line in edgeLines:
-    edgeList = line.split(',')
-    G.add_edge(int(edgeList[0]), int(edgeList[1]))
+#ネットワーク
+graph = nx.Graph()
+def get_fig(node_number):
+    graph.add_node(node_number, Position=(random.randrange(0, 100), random.randrange(0, 100)))
+    graph.add_edge(node_number, random.choice(graph.nodes()))
+    nx.draw(graph, pos=nx.get_node_attributes(graph,'Position'))
 
+fig = plt.figure(figsize=(5,4))
 
-pos = nx.circular_layout(G)
-nx.draw_networkx_nodes(G, pos, node_size=500, node_color="w")
-nx.draw_networkx_edges(G, pos, width=0.6)
-# nx.draw_networkx_edge_labels(G, pos,edge_labels)
-nx.draw_networkx_labels(G, pos ,font_size=10, font_color="k")
-
-
-plt.show()
+anim = animation.FuncAnimation(fig, get_fig, frames=30)
+anim.save('demoanimation.gif', writer='imagemagick', fps=4);

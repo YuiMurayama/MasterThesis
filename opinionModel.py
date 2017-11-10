@@ -6,11 +6,15 @@ import random
 import time
 from matplotlib import pyplot as plt
 #意見を数えるメソッド
+from numpy.random import randint
+
 
 def countC_of_opinionLayer(G):
     numOf0 = 0
     numOf1 = 0
     for nodeNum in range(nx.number_of_nodes(G)):
+
+        # print G.node[nodeNum]['opinion']
         if G.node[nodeNum]['opinion'] < 0.2:
             numOf0 += 1
         if G.node[nodeNum]['opinion'] > 0.8:
@@ -35,7 +39,6 @@ def opinionExchange(G,opinionList):
     # print 'opinionlist',opinionList
     for nodeNum in range(nx.number_of_nodes(G)):
         node = G.node[nodeNum]  # ランダムにノードを選択
-
         if node['activist'] != 1:
             copyNode_list = G.neighbors(nodeNum)  # コピー相手の候補リストを作る
             if copyNode_list != []:
@@ -52,5 +55,31 @@ def opinionExchange(G,opinionList):
                         # print 'こうかん'
         newOpinionList.append(node['opinion'])
     opinionList = newOpinionList
+    return G,opinionList
 
+
+
+def majorityGame(G,opinionList):
+    newOpinionList=[]
+    # print 'opinionlist',opinionList
+    for nodeNum in range(nx.number_of_nodes(G)):
+        node = G.node[nodeNum]  # ランダムにノードを選択
+        copyNode_list = G.neighbors(nodeNum)  # コピー相手の候補リストを作る
+        if copyNode_list != []:
+            numOfC = 0
+            numOfD = 0
+            for num in range(len(copyNode_list)):
+                if G.node[copyNode_list[num]]['opinion'] == 0:
+                    numOfC +=1
+                else:
+                    numOfD +=1
+                # print numOfC,numOfD
+                if numOfC < numOfD:
+                    node['opinion'] = 1
+                elif numOfC > numOfD:
+                    node['opinion'] = 0
+                else:
+                    node['opinion'] = randint(2)
+        newOpinionList.append(node['opinion'])
+    opinionList = newOpinionList
     return G,opinionList

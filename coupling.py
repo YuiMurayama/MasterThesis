@@ -13,8 +13,8 @@ def coupling(gameLayer,opinionLayer,opinionList):
         rand_of_copy = random.random()
         rand_of_whichLayer = random.random()
         # どちらからどちらへコピーするかの確率
-        if rand_of_copy < 0.5:
-            if rand_of_whichLayer <= 0.5:
+        if rand_of_copy < 0.8:
+            if rand_of_whichLayer <= 0.3:
                 gameLayer.node[nodeNum]['strategy'] = opinionLayer.node[nodeNum]['opinion']
             else:
                 if opinionLayer.node[nodeNum]['activist'] != 1:
