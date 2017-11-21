@@ -7,14 +7,14 @@ import random
 import networkx as nx
 
 
-def coupling(gameLayer,opinionLayer,opinionList):
+def coupling(gameLayer,opinionLayer,opinionList,opinionLayerStrength):
     newOpinionList = []
     for nodeNum in range(nx.number_of_nodes(opinionLayer) ):
         rand_of_copy = random.random()
         rand_of_whichLayer = random.random()
         # どちらからどちらへコピーするかの確率
         if rand_of_copy < 0.8:
-            if rand_of_whichLayer <= 0.3:
+            if rand_of_whichLayer <= opinionLayerStrength:
                 gameLayer.node[nodeNum]['strategy'] = opinionLayer.node[nodeNum]['opinion']
             else:
                 if opinionLayer.node[nodeNum]['activist'] != 1:

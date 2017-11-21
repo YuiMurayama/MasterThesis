@@ -26,7 +26,13 @@ def makeGraph_fromFile(nodeNum,edgeFile, layer, activistRate):
         for node in range(nodeNum):
             rand = random.random()
             # activistなら意見は0.2の確率でしか変えない、意見は1.0
-            if node % activistRate == 0:
+
+            if activistRate == 0.0:
+                activistInter = 1000000
+            else:
+                activistInter = 1.0/activistRate
+
+            if node % activistInter == 0:
             # if nx.degree(G)[node] >= 60:
                 activist = 1
                 opinion = 1
@@ -44,6 +50,7 @@ def makeGraph_fromFile(nodeNum,edgeFile, layer, activistRate):
             opinionList.append(opinion)
 
 
+
         # gameModelなら座標と0か1の戦略をもたせる
     else:
         for node in range(nodeNum):
@@ -54,34 +61,7 @@ def makeGraph_fromFile(nodeNum,edgeFile, layer, activistRate):
             # strategy = random.randint(0, 1)
             G.add_node(node,point=0,strategy=strategy)  # 0がcooperation,1がDefection
             strategyList.append(strategy)
-
-
     return (G, opinionList, strategyList)
-
-
-            # # エッジを貼る
-    # f_edge = open(edgeFile)
-    # edgeLines = f_edge.readlines()
-    # f_edge.close()
-    # for line in edgeLines:
-    #     edgeList = line.split(',')
-    #     G.add_edge(int(edgeList[0]), int(edgeList[1]))
-    #
-    # return (G,opinionList, strategyList)
-
-
-# makeGraph_fromFile('BAnetwork.csv','ON',0.1)[0]
-
-#
-# def printGstate(opinionLayer, gameLayer):
-#     Gstate_opinion =[]
-#     Gstate_strategy=[]
-#     for nodeNum in range(nx.number_of_nodes(opinionLayer)):
-#         Gstate_opinion.append(opinionLayer.node[nodeNum]['opinion'])
-#         Gstate_strategy.append(gameLayer.node[nodeNum]['strategy'])
-#
-#     print "Oは",Gstate_opinion
-#     # print "Gは",Gstate_strategy
 
 
 def printGstate(opinionLayer):

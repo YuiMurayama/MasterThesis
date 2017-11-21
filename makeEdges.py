@@ -27,7 +27,6 @@ def makeBA_edges(filename,nodeNum):
 def makeRegular_edges(filename,nodeNum):
     f = open(filename,'w')
     writer = csv.writer(f, lineterminator='\n')
-
     for node in range(nodeNum-1):
         edge =[node,node+1]
         writer.writerow(edge)

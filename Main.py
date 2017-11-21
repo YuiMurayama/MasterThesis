@@ -19,18 +19,17 @@ from matplotlib import pyplot as plt
 from publicGoodsGame import publicGoods_game
 
 
-activistRate = 200
+activistRate = 0.0
 nodeNum = 500
 kaisu = 100
-couplingStrength = 0.1
+couplingStrength = 0.0
+opinionLayerStrength = 0
 
 
 #--------------層の生成
 
-
 OLnetwork = 'RegularNetwork.csv'
 GLnetwork = 'BAnetwork2.csv'
-
 
 BA = 'BAnetwork.csv'
 
@@ -42,59 +41,54 @@ strategyList = gameLayer_info[2]
 
 
 #OLの層
-# opinionLayer_info = makeGraph_fromFile(nodeNum,OLnetwork, 'ON',activistRate)
-# opinionLayer = opinionLayer_info[0]
-# opinionList = opinionLayer_info[1]
-
-#OLがclusterの場合
-
-opinionLayer_info = makeClusteredInfor('clusteredNet.gpickle')
+opinionLayer_info = makeGraph_fromFile(nodeNum,OLnetwork, 'ON',activistRate)
 opinionLayer = opinionLayer_info[0]
 opinionList = opinionLayer_info[1]
 
+#OLがclusterの場合
+
+# opinionLayer_info = makeClusteredInfor('clusteredNet.gpickle')
+# opinionLayer = opinionLayer_info[0]
+# opinionList = opinionLayer_info[1]
+
 #---------------------------
 
-# #各層のCの数を数えるリスト
+# #各層の最初のCの数を数えてリストにいれる
 numOfCList_gameLayer =[]
 numOfCList_opinionLayer=[]
 
-# #初期のCooperatorの数をリストに加える
-
-originC_opinionLayer =countC_of_opinionLayer(opinionLayer)
-originC_gameLayer =countC_of_gameLayer(gameLayer)
-
-
-numOfCList_opinionLayer.append(originC_opinionLayer)
-numOfCList_gameLayer.append(originC_gameLayer)
-
+numOfCList_opinionLayer.append(countC_of_opinionLayer(opinionLayer))
+numOfCList_gameLayer.append(countC_of_gameLayer(gameLayer))
 
 #-------------------------
 
 
 for num in range(kaisu):
-    # print(random, type(random))
     rand = random.random()
-    # printGstate(opinionLayer, gameLayer)
-    # print countC_of_opinionLayer(opinionLayer)
     if rand < couplingStrength:
-        coupling_info =coupling(gameLayer, opinionLayer, opinionList)
+        coupling_info =coupling(gameLayer, opinionLayer, opinionList,opinionLayerStrength)
         gameLayer = coupling_info[0]
         opinionLayer = coupling_info[1]
         opinionList = coupling_info[2]
 
     else:
+
+        #こちらはGameLayer
         #PGGの場合
         # gameLayer = publicGoods_game(gameLayer,1.1,1)
         #囚人のジレンマの場合
         gameLayer = gameStep(gameLayer, -0.5, 1.5)
 
+        #こちらはOpinionLayer
         #voter game
-        # opinionLayerset = opinionExchange(opinionLayer,opinionList)
-
-        #majority vote
-        opinionLayerset = majorityGame(opinionLayer,opinionList)
+        opinionLayerset = opinionExchange(opinionLayer,opinionList)
         opinionLayer = opinionLayerset[0]
         opinionList = opinionLayerset[1]
+
+        #majority vote
+        # opinionLayerset = majorityGame(opinionLayer,opinionList)
+        # opinionLayer = opinionLayerset[0]
+        # opinionList = opinionLayerset[1]
 
     numOfCList_gameLayer.append(countC_of_gameLayer(gameLayer))
     numOfCList_opinionLayer.append(countC_of_opinionLayer(opinionLayer))
@@ -102,7 +96,6 @@ for num in range(kaisu):
 
 # print 'game', numOfCList_gameLayer
 print 'opinion',numOfCList_opinionLayer
-
 
 
 # printClusteredG(opinionLayer)
