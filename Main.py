@@ -21,10 +21,10 @@ from publicGoodsGame import publicGoods_game
 
 activistRate = 0.0
 nodeNum = 500
-kaisu =300
-couplingStrength = 0
+kaisu =2000
+couplingStrength = 0.2
 opinionLayerStrength = 0.5
-
+tolerance =0
 
 #--------------層の生成
 
@@ -79,7 +79,7 @@ for num in range(kaisu):
         #PGGの場合
         # gameLayer = publicGoods_game(gameLayer,1.1,1)
         #囚人のジレンマの場合
-        gameLayer = gameStep(gameLayer, -0.5, 1.5)
+        gameLayer = gameStep(gameLayer, -0.5, 1.5,tolerance)
 
         #こちらはOpinionLayer
         #voter game
@@ -103,11 +103,22 @@ for num in range(kaisu):
 # printClusteredG(opinionLayer)
 
 plt.plot(numOfCList_gameLayer,label="GameLayer")
-# plt.plot(numOfCList_opinionLayer,label="OpinionLayer")
+plt.plot(numOfCList_opinionLayer,label="OpinionLayer")
 plt.xlabel("Time Step")
 plt.ylabel("Number of Cooperators")
 
 ylim(0,nodeNum*1.03)
 xlim(0,kaisu)
 plt.legend(loc="lower right")
+
+
+# plt.subplot(233)
+# # plt.plot(numOfCList_gameLayer,label="GameLayer")
+# plt.plot(numOfCList_opinionLayer,label="OpinionLayer")
+# plt.xlabel("Time Step")
+# plt.ylabel("Number of Cooperators")
+#
+# ylim(0,nodeNum*1.03)
+# xlim(0,kaisu)
+# plt.legend(loc="lower right")
 plt.show()

@@ -42,7 +42,7 @@ def makePointList(G):
 
 
 #戦略をコピーする
-def copyStrategy(G,strategyList):
+def copyStrategy(G,strategyList,toleranceNum):
     for nodeNum in range(nx.number_of_nodes(G)):
         node = G.node[nodeNum]  # ランダムにノードを選択
         copyNode_list = G.neighbors(nodeNum)    #コピー相手の候補リストを作る
@@ -56,7 +56,7 @@ def copyStrategy(G,strategyList):
             x = random.random()
             if x < p:
                 if node['strategy'] == 1 and strategyList[copyNodeNum] == 0:
-                    if node['tolerance'] < 1:
+                    if node['tolerance'] < toleranceNum:
                         node['tolerance'] += 1
                     else:
                         node['strategy'] = strategyList[copyNodeNum]
@@ -94,10 +94,10 @@ def countC_of_gameLayer(G):
 #ペイオフと戦略コピーをまとめたものこれが全部！
 #G,s,tを入れるとGMを実行して返してくれる
 
-def gameStep(G,s,t):
+def gameStep(G,s,t,toleranceNum):
     Gset = game(G,s,t)
     G = Gset[0]
     strategyList = Gset[1]
-    G =copyStrategy(G,strategyList)
+    G =copyStrategy(G,strategyList,toleranceNum)
     # print calStrategyNum(G)
     return G
