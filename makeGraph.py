@@ -20,7 +20,6 @@ def makeGraph_fromFile(nodeNum,edgeFile, layer, activistRate):
         edgeList = line.split(',')
         G.add_edge(int(edgeList[0]), int(edgeList[1]))
 
-
     if layer == 'ON':
         NormalNum = 0
         for node in range(nodeNum):
@@ -54,12 +53,17 @@ def makeGraph_fromFile(nodeNum,edgeFile, layer, activistRate):
         # gameModelなら座標と0か1の戦略をもたせる
     else:
         for node in range(nodeNum):
+            tolerance = 0
+            biase = random.random()
+            # biase = 0.5
+
             if node % 2 == 0:
                 strategy = 0
+
             else:
                 strategy = 1
             # strategy = random.randint(0, 1)
-            G.add_node(node,point=0,strategy=strategy)  # 0がcooperation,1がDefection
+            G.add_node(node,point=0,strategy=strategy,biase = biase,tolerance = tolerance)  # 0がcooperation,1がDefection
             strategyList.append(strategy)
     return (G, opinionList, strategyList)
 

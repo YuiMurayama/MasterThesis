@@ -33,8 +33,6 @@ def game(G, s, t):
 
 
 
-
-
 def makePointList(G):
     pointList =[]
     for nodeNum in range(nx.number_of_nodes(G)):
@@ -57,8 +55,22 @@ def copyStrategy(G,strategyList):
             # print 'tanh', math.tanh(node['point'] - copyNode['point']),'pは',p
             x = random.random()
             if x < p:
-                node['strategy'] = strategyList[copyNodeNum]    #strategyListから戦略をコピー
+                if node['strategy'] == 1 and strategyList[copyNodeNum] == 0:
+                    if node['tolerance'] < 1:
+                        node['tolerance'] += 1
+                    else:
+                        node['strategy'] = strategyList[copyNodeNum]
+                        node['tolerance'] = 0
+
+                else:
+                    node['strategy'] = strategyList[copyNodeNum]    #strategyListから戦略をコピー
+
+
+        #ここにtorelanceのコードを入れる
+
+
         node['point'] = 0   #全てのポイントをリセットする!!!
+
     return G
 
 #CとDの数を数える

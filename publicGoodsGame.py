@@ -67,9 +67,9 @@ def copyStrategy(G,strategyList):
     return G
 
 
-gameLayer_info = makeGraph_fromFile(10, 'test.csv', 'GL', 0.0)
-gameLayer = gameLayer_info[0]
-strategyList = gameLayer_info[2]
+# gameLayer_info = makeGraph_fromFile(10, 'test.csv', 'GL', 0.0)
+# gameLayer = gameLayer_info[0]
+# strategyList = gameLayer_info[2]
 
 
 def publicGoods_game(G,r,c):

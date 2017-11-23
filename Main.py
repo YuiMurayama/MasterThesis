@@ -21,17 +21,19 @@ from publicGoodsGame import publicGoods_game
 
 activistRate = 0.0
 nodeNum = 500
-kaisu = 100
-couplingStrength = 0.0
-opinionLayerStrength = 0
+kaisu =300
+couplingStrength = 0
+opinionLayerStrength = 0.5
 
 
 #--------------層の生成
 
-OLnetwork = 'RegularNetwork.csv'
-GLnetwork = 'BAnetwork2.csv'
+network_dir = "./networks/"
 
-BA = 'BAnetwork.csv'
+OLnetwork = network_dir + 'RegularNetwork.csv'
+GLnetwork = network_dir + 'BAnetwork2.csv'
+
+BA = network_dir + 'BAnetwork.csv'
 
 
 #GLの層
@@ -41,7 +43,7 @@ strategyList = gameLayer_info[2]
 
 
 #OLの層
-opinionLayer_info = makeGraph_fromFile(nodeNum,OLnetwork, 'ON',activistRate)
+opinionLayer_info = makeGraph_fromFile(nodeNum,BA, 'ON',activistRate)
 opinionLayer = opinionLayer_info[0]
 opinionList = opinionLayer_info[1]
 
@@ -95,13 +97,13 @@ for num in range(kaisu):
 
 
 # print 'game', numOfCList_gameLayer
-print 'opinion',numOfCList_opinionLayer
+# print 'opinion',numOfCList_opinionLayer
 
 
 # printClusteredG(opinionLayer)
 
 plt.plot(numOfCList_gameLayer,label="GameLayer")
-plt.plot(numOfCList_opinionLayer,label="OpinionLayer")
+# plt.plot(numOfCList_opinionLayer,label="OpinionLayer")
 plt.xlabel("Time Step")
 plt.ylabel("Number of Cooperators")
 
@@ -109,4 +111,3 @@ ylim(0,nodeNum*1.03)
 xlim(0,kaisu)
 plt.legend(loc="lower right")
 plt.show()
-
