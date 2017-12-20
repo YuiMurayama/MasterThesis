@@ -25,25 +25,30 @@ def makeGraph_fromFile(nodeNum,edgeFile, layer, activistRate):
         for node in range(nodeNum):
             rand = random.random()
             # activistなら意見は0.2の確率でしか変えない、意見は1.0
-
             if activistRate == 0.0:
-                activistInter = 1000000
-            else:
-                activistInter = 1.0/activistRate
-
-            if node % activistInter == 0:
-            # if nx.degree(G)[node] >= 60:
-                activist = 1
-                opinion = 1
-            else:
-                # activistでないなら意見は変えまくるし意見は0か1をランダムに選ぶ
                 activist = 0
-                #どのノードが0なんかを固定
-                if NormalNum % 2 == 0:
+
+                if node %2 == 0:
                     opinion = 0
                 else:
                     opinion = 1
-                NormalNum = NormalNum +1
+
+            else:
+                activistInter = 1.0/activistRate
+
+            # print activistInter
+                if node % activistInter == 0:
+                # if nx.degree(G)[node] >= 60:
+                    activist = 1
+                    opinion = 1
+                else:
+                    # activistでないなら意見は変えまくるし意見は0か1をランダムに選ぶ
+                    activist = 0
+                    #どのノードが0なんかを固定
+                    if node % 2 == 0:
+                        opinion = 0
+                    else:
+                        opinion = 1
                 # opinion = random.randint(0, 1)
             G.add_node(node,opinion=opinion, activist=activist)
             opinionList.append(opinion)
@@ -54,8 +59,8 @@ def makeGraph_fromFile(nodeNum,edgeFile, layer, activistRate):
     else:
         for node in range(nodeNum):
             tolerance = 0
-            biase = random.random()
-            # biase = 0.5
+            # biase = random.random()
+            biase = 0.5
 
             if node % 2 == 0:
                 strategy = 0

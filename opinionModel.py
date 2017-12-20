@@ -45,15 +45,21 @@ def opinionExchange(G,opinionList):
                 copyNodeNum = random.choice(copyNode_list)  # 候補リストの中からランダムに選択
                 copyNode = G.node[copyNodeNum]
                 if copyNode['activist'] == 1:
+                    # print 'activist'
                     node['opinion'] = opinionList[copyNodeNum]
 
                 else:
-                    if opinionList[copyNodeNum] == 1:
+                    rand=random.random()
+                    if rand< 0.6:
                         node['opinion'] = opinionList[copyNodeNum]
-                    else:
-                        rand = random.random()
-                        if rand< 0.9:   #biaseをかける
-                            node['opinion'] = opinionList[copyNodeNum]
+                    # if opinionList[copyNodeNum] == 0:
+                    #     node['opinion'] = opinionList[copyNodeNum]
+                    # else:
+                    #     rand = random.random()
+                    #     if rand< 1.1:   #biaseをかける1以下ならCになりやすくなるよ
+                    #         node['opinion'] = opinionList[copyNodeNum]
+        # else:
+            # print 'activist',node['activist']
                         # print 'こうかん'
         newOpinionList.append(node['opinion'])
     opinionList = newOpinionList

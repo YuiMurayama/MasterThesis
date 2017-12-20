@@ -24,6 +24,15 @@ def coupling(gameLayer,opinionLayer,opinionList,opinionLayerStrength):
                     opinionLayer.node[nodeNum]['opinion'] = gameLayer.node[nodeNum]['strategy']
 
 
+        # if rand_of_copy < gameLayer.node[nodeNum]['biase']:
+        #     if nodeNum %2 == 0:
+        #         gameLayer.node[nodeNum]['strategy'] = opinionLayer.node[nodeNum]['opinion']
+        #     else:
+        #         if opinionLayer.node[nodeNum]['activist'] != 1:
+        #             opinionLayer.node[nodeNum]['opinion'] = gameLayer.node[nodeNum]['strategy']
+
+
+
         newOpinionList.append(opinionLayer.node[nodeNum]['opinion'])
 
     return (gameLayer, opinionLayer, newOpinionList)

@@ -19,10 +19,10 @@ from matplotlib import pyplot as plt
 from publicGoodsGame import publicGoods_game
 
 
-activistRate = 0.0
+activistRate = 0.05
 nodeNum = 500
-kaisu =2000
-couplingStrength = 0.2
+kaisu =200
+couplingStrength = 0.0
 opinionLayerStrength = 0.5
 tolerance =0
 
@@ -107,7 +107,7 @@ plt.plot(numOfCList_opinionLayer,label="OpinionLayer")
 plt.xlabel("Time Step")
 plt.ylabel("Number of Cooperators")
 
-ylim(0,nodeNum*1.03)
+ylim(-5,nodeNum*1.03)
 xlim(0,kaisu)
 plt.legend(loc="lower right")
 
