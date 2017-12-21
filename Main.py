@@ -21,8 +21,8 @@ from publicGoodsGame import publicGoods_game
 
 activistRate = 0.05
 nodeNum = 500
-kaisu =200
-couplingStrength = 0.0
+kaisu =2000
+couplingStrength = 0.2
 opinionLayerStrength = 0.5
 tolerance =0
 
@@ -105,7 +105,7 @@ for num in range(kaisu):
 plt.plot(numOfCList_gameLayer,label="GameLayer")
 plt.plot(numOfCList_opinionLayer,label="OpinionLayer")
 plt.xlabel("Time Step")
-plt.ylabel("Number of Cooperators")
+plt.ylabel("Number of Cooperation")
 
 ylim(-5,nodeNum*1.03)
 xlim(0,kaisu)
