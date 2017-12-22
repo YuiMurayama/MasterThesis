@@ -24,15 +24,27 @@ def makeBA_edges(filename,nodeNum):
 
 
 #一次元レギュラーネットワーク
-def makeRegular_edges(filename,nodeNum):
+def makeRegular_edges(filename,nodeNum,linkNum):
     f = open(filename,'w')
     writer = csv.writer(f, lineterminator='\n')
-    for node in range(nodeNum-1):
-        edge =[node,node+1]
-        writer.writerow(edge)
-    finalEdge = [nodeNum-1,0]
-    writer.writerow(finalEdge)
+    for node in range(nodeNum):
+        for l in range(linkNum):
+            linkOpponent = (node+l+1) % (nodeNum)
+            edge =[node,linkOpponent]
+            writer.writerow(edge)
+        # for l in range(linkNum):
+        #     finalEdge = [nodeNum-l,linkNum-l]
+        #     writer.writerow(finalEdge)
+    # writer.writerow([nodeNum-2,nodeNum-1])
+    # for l in range(linkNum-1):
+    #     finalEdge = [nodeNum-l-1,nodeNum-l+1-nodeNum]
+    #     writer.writerow(finalEdge)
+    # writer.writerow([nodeNum-2,0])
+    # writer.writerow([nodeNum-1, 0])
     f.close()
+
+makeRegular_edges('Regular(degree=18).csv',500,9)
+makeRegular_edges('Regular(degree=20).csv',500,10)
 
 
 def makerandomRegular_deges(filename,nodeNum):
@@ -59,9 +71,9 @@ def makeClustered_edges(filename,nodeNum):
     return G
 
 
-makeClustered_edges('clustered_test.csv',30)
+# makeClustered_edges('clustered_test.csv',30)
 
-makeRegular_edges('test.csv',10)
+# makeRegular_edges('test.csv',10)
 
 
 
@@ -92,7 +104,7 @@ bins = 30
 
 
 
-makeRegular_edges('test.csv',10)
+# makeRegular_edges('test.csv',10)
 
 
 # G   = makeRegular_edges('test.csv',10)
